@@ -14,5 +14,16 @@ class OfflineProjectsRepository(private val projectDao: ProjectDao): ProjectsRep
     override suspend fun deleteProject(item: Project) = projectDao.delete(item)
 
     override suspend fun updateProject(item: Project) = projectDao.update(item)
+    override fun getUserStoriesForProjectID(projectID: Int): Flow<List<String>> = projectDao.getUserStoriesForProject(projectID)
+
+    override suspend fun addUserStoryToProject(projectId: Int, userStory: String) {
+        val currentProject = projectDao.getProjectById(projectId) ?: return
+        val userStories = currentProject.userStories.toMutableList()
+        userStories.add(userStory)
+        val updatedProject = currentProject.copy(userStories = userStories)
+        projectDao.update(updatedProject)
+    }
+
+    override suspend fun getProjectById(projectID: Int): Project? = projectDao.getProjectById(projectID)
 
 }

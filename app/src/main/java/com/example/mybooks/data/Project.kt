@@ -14,4 +14,5 @@ data class Project(
     val title: String,
     val start_date: String,
     val end_date: String,
+    val userStories: List<String> = emptyList()
 )

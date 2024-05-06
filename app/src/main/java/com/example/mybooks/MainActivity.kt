@@ -27,11 +27,9 @@ import androidx.navigation.compose.composable
 import com.example.mybooks.ui.theme.MyBooksTheme
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import com.example.mybooks.data.AppDataContainer
 import com.example.mybooks.data.UsersRepository
-import com.example.mybooks.data.ProjectsRepository
 import com.example.mybooks.data.Project
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,8 +44,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-
-
+import androidx.lifecycle.viewModelScope
+import com.example.mybooks.data.ProjectsRepository
 
 
 class MainActivity : ComponentActivity() {
@@ -86,8 +84,28 @@ class MainActivity : ComponentActivity() {
                         composable("addProject") {
                             addProject(navController, viewModel)
                         }
-                        composable("projectMain") {
-                            ProjectMain(navController)
+                        composable("projectMain/{projectId}") {
+                            navBackStackEntry ->
+                            //val projectId = navBackStackEntry.arguments?.getInt("projectId")
+                            val pr2 = navBackStackEntry.arguments.toString()
+                            val projectIdRegex = Regex("projectId=(\\d+)")
+                            val matchResult = projectIdRegex.find(pr2)
+                            val projectId = matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
+
+                            if(projectId != null){
+                                ProjectMain(navController,projectId)
+                            }
+
+                        }
+                        composable("userStories/{projectId}"){
+                            navBackStackEntry ->
+                            val pr3 = navBackStackEntry.arguments.toString()
+                            val projectIdRegex = Regex("projectId=(\\d+)")
+                            val matchResult = projectIdRegex.find(pr3)
+                            val projectId = matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
+                            if(projectId != null){
+                                UserStories(navController,appContainer.projectsRepository,projectId,viewModel)
+                            }
                         }
                     }
                 }
@@ -498,7 +516,8 @@ private fun Project(navController: NavHostController, project: Project, onClickD
 
                 Button(
                     onClick = {
-                        navController.navigate("projectMain")
+                        navController.navigate("projectMain/${project.id}")
+                         // ProjectMain(navController = navController , projectId = 3 )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -640,13 +659,15 @@ fun addProject(navController: NavHostController, viewModel: MainViewModel) {
 
 
 @Composable
-fun ProjectMain(navController: NavHostController) {
+fun ProjectMain(navController: NavHostController, projectId: Int) {
     val orange = Color(0xFFE77A1C)
     var expandedES by remember { mutableStateOf(false) }
     var expandedSWOT by remember { mutableStateOf(false) }
     var expandedR by remember { mutableStateOf(false) }
     var expandedPB by remember { mutableStateOf(false) }
     var expandedSB by remember { mutableStateOf(false) }
+    var id by remember { mutableStateOf(-1)    }
+    id = projectId
 
 
     Box(
@@ -935,7 +956,7 @@ fun ProjectMain(navController: NavHostController) {
                     if (expandedPB) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("userStories/$id")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -1016,7 +1037,93 @@ fun ProjectMain(navController: NavHostController) {
 
 
 
+@Composable
+fun UserStories(
+    navController: NavHostController,
+    pr: ProjectsRepository,
+    projectId: Int,
+    viewModel: MainViewModel
+){
+    val orange = Color(0xFFE77A1C)
+    var id by remember { mutableStateOf(-1) }
+    id = projectId
+    var newStory by remember { mutableStateOf("") }
+    var userStoriesState by remember { mutableStateOf<List<String>>(emptyList()) }
 
+    LaunchedEffect(key1 = id) {
+        pr.getUserStoriesForProjectID(id).collect { userStories ->
+            userStoriesState = userStories
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        )
+        {
+
+            Image(
+                painter = painterResource(R.drawable.logo_pm),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+            Text("User Stories:")
+
+            LazyColumn {
+                //userStoriesState devolvia una lista con un solo eleemtno con todas las US, por eso es necesari esto
+                val userStories = userStoriesState.firstOrNull()?.split(",")?: emptyList()
+                var counter = 1
+                items(userStories){ us ->
+                    if(us.trim() != "") {
+                        Text("US-$counter$us".trim())
+                        counter++
+                    }
+                }
+            }
+
+
+            TextField(
+                value = newStory,
+                onValueChange = { newStory = it },
+                label = { Text("New User Story") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+            // Botón para agregar la nueva historia de usuario
+            Button(
+                onClick = {
+                    // Llamar a addUserStoryToProject dentro de un scope de coroutine
+                    viewModel.viewModelScope.launch {
+                        pr.addUserStoryToProject(id, newStory)
+                        // Limpiar el campo de texto después de agregar la historia
+                        newStory = ""
+                    }
+
+                },
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                Text("Add User Story")
+            }
+        }
+    }
+
+}
 
 
 

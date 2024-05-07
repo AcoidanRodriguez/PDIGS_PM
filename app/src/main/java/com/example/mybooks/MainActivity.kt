@@ -107,6 +107,16 @@ class MainActivity : ComponentActivity() {
                                 UserStories(navController,appContainer.projectsRepository,projectId,viewModel)
                             }
                         }
+                        composable("userStoriesSprint/{projectId}"){
+                            navBackStackEntry ->
+                            val pr4 = navBackStackEntry.arguments.toString()
+                            val projectIdRegex = Regex("projectId=(\\d+)")
+                            val matchResult = projectIdRegex.find(pr4)
+                            val projectId = matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
+                            if(projectId != null){
+                                UserStoriesSprint(projectId,appContainer.projectsRepository,viewModel)
+                            }
+                        }
                     }
                 }
             }
@@ -993,27 +1003,15 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
                     if (expandedSB) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("userStoriesSprint/$id")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp)
                         ) {
-                            Text("Story Point", color = Color.White)
+                            Text("Sprint US", color = Color.White)
                         }
 
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Button(
-                            onClick = {
-                                navController.navigate("projectMain")
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                        ) {
-                            Text("Sprints", color = Color.White)
-                        }
                     }
                 }
             }
@@ -1088,7 +1086,7 @@ fun UserStories(
                 var counter = 1
                 items(userStories){ us ->
                     if(us.trim() != "") {
-                        Text("US-$counter$us".trim())
+                        Text("US-$counter $us".trim())
                         counter++
                     }
                 }
@@ -1104,13 +1102,10 @@ fun UserStories(
                     .padding(vertical = 8.dp)
             )
 
-            // Botón para agregar la nueva historia de usuario
             Button(
                 onClick = {
-                    // Llamar a addUserStoryToProject dentro de un scope de coroutine
                     viewModel.viewModelScope.launch {
                         pr.addUserStoryToProject(id, newStory)
-                        // Limpiar el campo de texto después de agregar la historia
                         newStory = ""
                     }
 
@@ -1125,7 +1120,107 @@ fun UserStories(
 
 }
 
+@Composable
+fun UserStoriesSprint(
+    projectId: Int,
+    pr: ProjectsRepository,
+    viewModel: MainViewModel
+){
+    val orange = Color(0xFFE77A1C)
+    var id = projectId
+    Text(projectId.toString())
+    var idNewStory by remember { mutableStateOf("") }
+    var userStoriesState by remember { mutableStateOf<List<String>>(emptyList()) }
+    var userStoriesForProject by remember { mutableStateOf<List<String>>(emptyList()) }
 
+    LaunchedEffect(key1 = id) {
+        pr.getUserStoriesForProjectID(id).collect { userStories ->
+            userStoriesState = userStories
+        }
+    }
+    LaunchedEffect(key1 = id) {
+        pr.getUserStoriesForSprintForProject(id).collect { userStories ->
+            userStoriesForProject = userStories
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        )
+        {
+
+            Image(
+                painter = painterResource(R.drawable.logo_pm),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+            Text("User Stories:")
+
+            LazyColumn {
+                //userStoriesState devolvia una lista con un solo eleemtno con todas las US, por eso es necesari esto
+                val userStories = userStoriesForProject.firstOrNull()?.split(",")?: emptyList()
+                //Faltaria que el id de la historia coincida con el del PB y ya
+                var counter = 1
+                items(userStories){ us ->
+                    Text(us)
+                    counter++
+                }
+            }
+
+            TextField(
+                value = idNewStory,
+                onValueChange = { idNewStory= it },
+                label = { Text(text = "Insert user story number") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+
+            fun obtainUS(): String {
+                val userStoriesList = userStoriesState.firstOrNull()?.split(",")?: emptyList()
+                var counter = 0
+                var idUS = idNewStory.toInt() //el usuario tiene que meter un numero obligatoriamente, y que no sea 0
+                //idUS-- // para tener la posicion en la lista -> no hace falta por que la primera posicion parece ser que siempre la ocupa una string vacia.
+                var newStory=""
+                userStoriesList.forEach { us ->
+                    if(idUS==counter){
+                        newStory=us
+                    }
+                    counter++
+                }
+                return newStory
+            }
+
+            Button(
+                onClick = {
+                    viewModel.viewModelScope.launch {
+                        pr.addUserStoryForSprintToProject(id, "US-$idNewStory ${obtainUS()}")
+                    }
+                    idNewStory=""
+                },
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                Text("Add User Story to sprint")
+            }
+        }
+    }
+}
 
 
 

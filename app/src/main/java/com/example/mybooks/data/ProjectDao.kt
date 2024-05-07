@@ -31,15 +31,21 @@ interface ProjectDao {
     @Update
     suspend fun updateProject(project: Project)
 
-    // Nuevo método para obtener las historias de usuario de un proyecto por su ID
+
     @Query("SELECT userStories FROM projects_table WHERE id = :projectId")
     fun getUserStoriesForProject(projectId: Int): Flow<List<String>>
 
-    // Nuevo método para agregar una historia de usuario a un proyecto existente
+
     @Query("UPDATE projects_table SET userStories = userStories || :userStory WHERE id = :projectId")
     suspend fun addUserStoryToProject(projectId: Int, userStory: String)
 
     @Query("SELECT * FROM projects_table WHERE id = :projectId")
     suspend fun getProjectById(projectId: Int): Project?
+
+    @Query("SELECT userStoriesForSprint FROM projects_table WHERE id = :projectId")
+    fun getUserStoriesForSprintForProject(projectId: Int): Flow<List<String>>
+
+    @Query("UPDATE projects_table SET userStoriesForSprint = userStoriesForSprint || :userStory WHERE id = :projectId")
+    suspend fun addUserStoryForSprintToProject(projectId: Int, userStory: String)
 
 }

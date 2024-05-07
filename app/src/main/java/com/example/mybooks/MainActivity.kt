@@ -46,6 +46,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
+import com.example.mybooks.data.Business
+import com.example.mybooks.data.Market
+import com.example.mybooks.data.Income
+import com.example.mybooks.data.Competitors
+import com.example.mybooks.data.Stakeholders
 
 
 
@@ -53,7 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels(){
-        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository)
+        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository,appContainer.businessRepository,appContainer.marketRepository,appContainer.incomeRepository,appContainer.competitorsRepository,appContainer.stakeholdersRepository)
     }
     private lateinit var appContainer: AppDataContainer
 
@@ -89,6 +94,38 @@ class MainActivity : ComponentActivity() {
                         composable("projectMain") {
                             ProjectMain(navController)
                         }
+                        composable("businesses") {
+                            Businesses(navController,viewModel)
+                        }
+                        composable("addbusinesses") {
+                            addBusiness(navController,viewModel)
+                        }
+                        composable("Markets") {
+                            Markets(navController,viewModel)
+                        }
+                        composable("addmarket") {
+                            addMarket(navController,viewModel)
+                        }
+                        composable("Competitors") {
+                            Competitors(navController,viewModel)
+                        }
+                        composable("addcompetitor") {
+                            addCompetitor(navController,viewModel)
+                        }
+                        composable("Incomes") {
+                            Incomes(navController,viewModel)
+                        }
+                        composable("addincomes") {
+                            addIncome(navController,viewModel)
+                        }
+                        composable("Stakeholders") {
+                            Stakeholders(navController,viewModel)
+                        }
+                        composable("addstakeholders") {
+                            addStakeholder(navController,viewModel)
+                        }
+
+
                     }
                 }
             }
@@ -1013,242 +1050,10 @@ fun ProjectMain(navController: NavHostController) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
 @Composable
-fun Perfil(navController: NavHostController, viewModel: MainViewModel) {
-    var correo by remember { mutableStateOf("correo1@email.com") }
-    var usuario by remember { mutableStateOf("prueba1") }
-    var contraseña by remember { mutableStateOf("contraseña1") }
+fun Businesses(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-
-    /*
-    val activeUser = viewModel.getActiveUser()
-
-    activeUser?.let {
-        usuario = it.username
-        contraseña = it.password
-    }
-    */
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = orange)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Image(
-            painter = painterResource(R.drawable.profile),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            alpha = 0.8F,
-            modifier = Modifier
-                .size(200.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Correo electrónico:")
-        TextField(
-            value = correo,
-            onValueChange = { correo = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = "Usuario:")
-        TextField(
-            value = usuario,
-            onValueChange = { usuario = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = "Contraseña:")
-        TextField(
-            value = contraseña,
-            onValueChange = { contraseña = it },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = {
-                navController.navigate("main")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(text = "Guardar", color = Color.White)
-        }
-
-        Button(
-            onClick = {
-                //viewModel.deactivateUser(activeUser)
-                navController.navigate("home")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(text = "Cerrar Sesión", color = Color.White)
-        }
-    }
-}
-
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Principal(navController: NavHostController
-) {
-    val navyBlue = Color(0xFF001F3F)
-    val orange = Color(0xFFE77A1C)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = orange)
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-            Image(
-                painter = painterResource(R.drawable.logo),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha = 0.8F,
-                modifier = Modifier
-                    .size(200.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("biblioteca")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Biblioteca")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("futuraslecturas")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Futuras Lecturas")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("leidos")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Leídos")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("añadirlibro")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Añadir Libro")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("perfil")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Perfil")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("ayuda")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Ayuda")
-            }
-        }
-    }
-}
-
-@Composable
-fun Biblioteca(viewModel: MainViewModel) {
-    val orange = Color(0xFFE77A1C)
-    val libros by viewModel.getAllBooks().collectAsState(initial = emptyList())
+    val Business by viewModel.getAllBusiness().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -1264,48 +1069,55 @@ fun Biblioteca(viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.biblio),
+                painter = painterResource(R.drawable.businesses),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
                 modifier = Modifier
                     .size(200.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            if (libros.isEmpty()) {
-                Text("No hay libros en la Biblioteca", color = Color.White)
-            } else {
 
-            LazyColumn(
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("addBusiness")
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(56.dp)
             ) {
-                items(libros) { libro ->
-                    BookItem(
-                        libro = libro,
-                        onClickDelete = {
-                            viewModel.deleteBook(libro)
-                        },
-                        onAddToFavorites = {
-                            viewModel.addToFavorites(libro)
-                        },
-                        onAddToRead = {
-                            viewModel.addToRead(libro)
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                Text("Add Business")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (Business.isEmpty()) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(Business) { Business ->
+                        Business(
+                            navController,
+                            Business = Business,
+                            onClickDelete = {
+                                viewModel.deleteBusiness(Business)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
             }
         }
     }
 }
 
 
-
 @Composable
-private fun BookItem(libro: Book, onClickDelete: () -> Unit, onAddToFavorites: () -> Unit, onAddToRead: () -> Unit) {
+private fun Business(navController: NavHostController, Business: Business, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -1316,46 +1128,23 @@ private fun BookItem(libro: Book, onClickDelete: () -> Unit, onAddToFavorites: (
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${libro.name}")
+            Text(
+                text = "${Business.description}",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+            )
 
             if (expanded) {
-                Text(text = "Autor: ${libro.author}")
-                Text(text = "Género: ${libro.genre}")
-                Text(text = "Descripción: ${libro.description}")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = onAddToFavorites,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Añadir a Futuras Lecturas", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = onAddToRead,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Añadir a Leídos", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = onClickDelete,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    Text("Eliminar de la Biblioteca", color = Color.White)
+                    Text("Delete Business", color = Color.White)
                 }
             }
         }
@@ -1364,190 +1153,8 @@ private fun BookItem(libro: Book, onClickDelete: () -> Unit, onAddToFavorites: (
 
 
 @Composable
-fun FuturasLecturas(viewModel: MainViewModel) {
-    val orange = Color(0xFFE77A1C)
-    val libros by viewModel.getFavoriteBooks().collectAsState(initial = emptyList())
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = orange)
-            .padding(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.future),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha = 0.8F,
-                modifier = Modifier
-                    .size(200.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            if (libros.isEmpty()) {
-                Text("No hay libros en Futuras Lecturas", color = Color.White)
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    items(libros) { libro ->
-                        BookItemFavorite(
-                            libro = libro,
-                            onDeleteFromFavorites = {
-                                viewModel.deleteFromFavorites(libro)
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun BookItemFavorite(libro: Book, onDeleteFromFavorites: () -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = !expanded }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "${libro.name}")
-
-            if (expanded) {
-                Text(text = "Autor: ${libro.author}")
-                Text(text = "Género: ${libro.genre}")
-                Text(text = "Descripción: ${libro.description}")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = onDeleteFromFavorites,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Eliminar de Futuras Lecturas", color = Color.White)
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun Leidos(viewModel: MainViewModel) {
-    val orange = Color(0xFFE77A1C)
-
-    val libros by viewModel.getReadBooks().collectAsState(initial = emptyList())
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = orange)
-            .padding(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.completed),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha = 0.8F,
-                modifier = Modifier
-                    .size(200.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            if (libros.isEmpty()) {
-                Text("No hay libros en Leídos", color = Color.White)
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    items(libros) { libro ->
-                        BookItemRead(
-                            libro = libro,
-                            onDeleteFromRead = {
-                                viewModel.deleteFromRead(libro)
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun BookItemRead(libro: Book, onDeleteFromRead: () -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = !expanded }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "${libro.name}")
-
-            if (expanded) {
-                Text(text = "Autor: ${libro.author}")
-                Text(text = "Género: ${libro.genre}")
-                Text(text = "Descripción: ${libro.description}")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = onDeleteFromRead,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Eliminar de Leídos", color = Color.White)
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun añadirLibro(navController: NavHostController, booksRepository: BooksRepository, viewModel: MainViewModel) {
-    var titulo by remember { mutableStateOf("") }
-    var autor by remember { mutableStateOf("") }
-    var genero by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
+fun addBusiness(navController: NavHostController, viewModel: MainViewModel) {
+    var description by remember { mutableStateOf("") }
     val orange = Color(0xFFE77A1C)
 
     Box(
@@ -1564,7 +1171,7 @@ fun añadirLibro(navController: NavHostController, booksRepository: BooksReposit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.addbook),
+                painter = painterResource(R.drawable.business),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
@@ -1584,88 +1191,36 @@ fun añadirLibro(navController: NavHostController, booksRepository: BooksReposit
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Título:",
+                        text = "Business:",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
                     )
                     TextField(
-                        value = titulo,
-                        onValueChange = { titulo = it },
+                        value = description,
+                        onValueChange = { description = it },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Autor:",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                    )
-                    TextField(
-                        value = autor,
-                        onValueChange = { autor = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Género:",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                    )
-                    TextField(
-                        value = genero,
-                        onValueChange = { genero = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Descripción:",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                    )
-                    TextField(
-                        value = descripcion,
-                        onValueChange = { descripcion = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
                         onClick = {
-                            if (titulo.isNotEmpty()) {
-                                val nuevoLibro = Book(
-                                    username = "nombre_usuario",
-                                    name = titulo,
-                                    author = autor,
-                                    description = descripcion,
-                                    genre = genero
+                            if (description.isNotEmpty()) {
+                                val newBusiness = Business(
+                                    description = description,
                                 )
-                                viewModel.insertBook(nuevoLibro)
-                                navController.navigate("main")
+                                viewModel.insertBusiness(newBusiness)
+                                navController.navigate("Business")
                             }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
                     ) {
-                        Text("Añadir a la Biblioteca", color = Color.White)
+                        Text("Add Business", color = Color.White)
                     }
                 }
             }
@@ -1674,8 +1229,10 @@ fun añadirLibro(navController: NavHostController, booksRepository: BooksReposit
 }
 
 @Composable
-fun Ayuda(){
+fun Markets(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
+    val Market by viewModel.getAllMarket().collectAsState(initial = emptyList())
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -1690,7 +1247,7 @@ fun Ayuda(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.question),
+                painter = painterResource(R.drawable.market),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
@@ -1698,6 +1255,107 @@ fun Ayuda(){
                     .size(200.dp)
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("addMarket")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text("Add Market")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (Market.isEmpty()) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(Market) { Market ->
+                        Market(
+                            navController,
+                            Market = Market,
+                            onClickDelete = {
+                                viewModel.deleteMarket(Market)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun Market(navController: NavHostController, Market: Market, onClickDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${Market.description}",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+            )
+
+            if (expanded) {
+                Button(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Delete Market", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun addMarket(navController: NavHostController, viewModel: MainViewModel) {
+    var description by remember { mutableStateOf("") }
+    val orange = Color(0xFFE77A1C)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.markets),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -1707,39 +1365,602 @@ fun Ayuda(){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
+
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        """
-                USO:
-                
-                Biblioteca:
-                Visualiza toda la colección de libros que has añadido. Aquí podrás añadir un libro a la sección de 'Futuras Lecturas' o 'Leídos' .
-
-                Futuras Lecturas:
-                Añade aquí desde la 'Biblioteca' todos los libros que te interesen y desees leer en un futuro.
-
-                Leídos:
-                Guarda aquí desde la 'Biblioteca' todos los libros que ya hayas leído y quieras recordar.
-
-                Añadir Libro:
-                Añade los libros que te interesen a tu 'Biblioteca'. El único campo obligatorio será el título. Eso sí, también puedes añadir el autor, el género y una descripción con los detalles que consideres importantes del libro.
-
-                Perfil:
-                Actualiza tu correo electrónico, nombre de usuario o contraseña para cada vez que inicies sesión. Además podrás la cerrar sesión de usuario actualmente abierta.
-                
-                
-                
-                CONTACTO:
-                
-                Email:
-                carlos.rodriguez153@alu.ulpgc.es
-                antonio.medina115@alu.ulpgc.es
-            """.trimIndent(), color = Color.White
+                        text = "Market:",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                     )
+                    TextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            if (description.isNotEmpty()) {
+                                val newMarket = Market(
+                                    description = description,
+                                )
+                                viewModel.insertMarket(newMarket)
+                                navController.navigate("Market")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Add Market", color = Color.White)
+                    }
                 }
             }
         }
     }
 }
-*/
+
+
+@Composable
+fun Competitors(navController: NavHostController, viewModel: MainViewModel) {
+    val orange = Color(0xFFE77A1C)
+    val Competitors by viewModel.getAllCompetitor().collectAsState(initial = emptyList())
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.competitor),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("addCompetitor")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text("Add Competitor")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (Competitors.isEmpty()) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(Competitors) { Competitor ->
+                        Competitor(
+                            navController,
+                            competitor = Competitor,
+                            onClickDelete = {
+                                viewModel.deleteCompetitor(
+                                    Competitor)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun Competitor(navController: NavHostController, competitor: Competitors, onClickDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${competitor.description}",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+            )
+
+            if (expanded) {
+                Button(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Delete Competitor", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun addCompetitor(navController: NavHostController, viewModel: MainViewModel) {
+    var description by remember { mutableStateOf("") }
+    val orange = Color(0xFFE77A1C)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.competitors),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = orange)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                item {
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Competitor:",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    )
+                    TextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            if (description.isNotEmpty()) {
+                                val newCompetitor = Competitors(
+                                    description = description,
+                                )
+                                viewModel.insertCompetitor(newCompetitor)
+                                navController.navigate("Competitor")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Add Competitor", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun Incomes(navController: NavHostController, viewModel: MainViewModel) {
+    val orange = Color(0xFFE77A1C)
+    val Income by viewModel.getAllIncome().collectAsState(initial = emptyList())
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.income),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("addIncome")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text("Add Income")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (Income.isEmpty()) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(Income) { Income ->
+                        Income(
+                            navController,
+                            Income = Income,
+                            onClickDelete = {
+                                viewModel.deleteIncome(Income)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun Income(navController: NavHostController, Income: Income, onClickDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${Income.description}",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+            )
+
+            if (expanded) {
+                Button(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Delete Income", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun addIncome(navController: NavHostController, viewModel: MainViewModel) {
+    var description by remember { mutableStateOf("") }
+    val orange = Color(0xFFE77A1C)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.incomes),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = orange)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                item {
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Income:",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    )
+                    TextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            if (description.isNotEmpty()) {
+                                val newIncome = Income(
+                                    description = description,
+                                )
+                                viewModel.insertIncome(newIncome)
+                                navController.navigate("Income")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Add Income", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Stakeholders(navController: NavHostController, viewModel: MainViewModel) {
+    val orange = Color(0xFFE77A1C)
+    val Stakeholder by viewModel.getAllStakeholders().collectAsState(initial = emptyList())
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.stakeholder),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("addStakeholder")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text("Add Stakeholder")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (Stakeholder.isEmpty()) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(Stakeholder) { stakeholder ->
+                        Stakeholder(
+                            navController,
+                            stakeholders = stakeholder,
+                            onClickDelete = {
+                                viewModel.deleteStakeholders(stakeholder)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun Stakeholder(navController: NavHostController, stakeholders: Stakeholders, onClickDelete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${stakeholders.description}",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+            )
+
+            if (expanded) {
+                Button(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Delete Stakeholder", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun addStakeholder(navController: NavHostController, viewModel: MainViewModel) {
+    var description by remember { mutableStateOf("") }
+    val orange = Color(0xFFE77A1C)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = orange)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.stakeholders),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.8F,
+                modifier = Modifier
+                    .size(200.dp)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = orange)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                item {
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Stakeholder:",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    )
+                    TextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            if (description.isNotEmpty()) {
+                                val newStakeholder = Stakeholders(
+                                    description = description,
+                                )
+                                viewModel.insertStakeholders(newStakeholder)
+                                navController.navigate("Stakeholder")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Add Stakeholder", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

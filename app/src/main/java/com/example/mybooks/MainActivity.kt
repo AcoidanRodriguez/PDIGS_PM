@@ -731,7 +731,7 @@ fun ProjectMain(navController: NavHostController) {
                     if (expandedES) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("businesses")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -744,7 +744,7 @@ fun ProjectMain(navController: NavHostController) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Markets")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -757,7 +757,7 @@ fun ProjectMain(navController: NavHostController) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Competitors")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -770,7 +770,7 @@ fun ProjectMain(navController: NavHostController) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Incomes")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -783,7 +783,7 @@ fun ProjectMain(navController: NavHostController) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Stakeholders")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -1053,7 +1053,7 @@ fun ProjectMain(navController: NavHostController) {
 @Composable
 fun Businesses(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val Business by viewModel.getAllBusiness().collectAsState(initial = emptyList())
+    val business by viewModel.getAllBusiness().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -1081,7 +1081,7 @@ fun Businesses(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addBusiness")
+                    navController.navigate("addbusinesses")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1092,19 +1092,19 @@ fun Businesses(navController: NavHostController, viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (Business.isEmpty()) {
+            if (business.isEmpty()) {
             } else {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(Business) { Business ->
+                    items(business) { business ->
                         Business(
                             navController,
-                            Business = Business,
+                            business = business,
                             onClickDelete = {
-                                viewModel.deleteBusiness(Business)
+                                viewModel.deleteBusiness(business)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -1117,7 +1117,7 @@ fun Businesses(navController: NavHostController, viewModel: MainViewModel) {
 
 
 @Composable
-private fun Business(navController: NavHostController, Business: Business, onClickDelete: () -> Unit) {
+private fun Business(navController: NavHostController, business: Business, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -1133,7 +1133,7 @@ private fun Business(navController: NavHostController, Business: Business, onCli
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${Business.description}",
+                text = "${business.description}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
@@ -1213,7 +1213,7 @@ fun addBusiness(navController: NavHostController, viewModel: MainViewModel) {
                                     description = description,
                                 )
                                 viewModel.insertBusiness(newBusiness)
-                                navController.navigate("Business")
+                                navController.navigate("businesses")
                             }
                         },
                         modifier = Modifier
@@ -1231,7 +1231,7 @@ fun addBusiness(navController: NavHostController, viewModel: MainViewModel) {
 @Composable
 fun Markets(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val Market by viewModel.getAllMarket().collectAsState(initial = emptyList())
+    val market by viewModel.getAllMarket().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -1259,7 +1259,7 @@ fun Markets(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addMarket")
+                    navController.navigate("addmarket")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1270,19 +1270,19 @@ fun Markets(navController: NavHostController, viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (Market.isEmpty()) {
+            if (market.isEmpty()) {
             } else {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(Market) { Market ->
+                    items(market) { market ->
                         Market(
                             navController,
-                            Market = Market,
+                            market = market,
                             onClickDelete = {
-                                viewModel.deleteMarket(Market)
+                                viewModel.deleteMarket(market)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -1295,7 +1295,7 @@ fun Markets(navController: NavHostController, viewModel: MainViewModel) {
 
 
 @Composable
-private fun Market(navController: NavHostController, Market: Market, onClickDelete: () -> Unit) {
+private fun Market(navController: NavHostController, market: Market, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -1311,7 +1311,7 @@ private fun Market(navController: NavHostController, Market: Market, onClickDele
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${Market.description}",
+                text = "${market.description}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
@@ -1391,7 +1391,7 @@ fun addMarket(navController: NavHostController, viewModel: MainViewModel) {
                                     description = description,
                                 )
                                 viewModel.insertMarket(newMarket)
-                                navController.navigate("Market")
+                                navController.navigate("Markets")
                             }
                         },
                         modifier = Modifier
@@ -1438,7 +1438,7 @@ fun Competitors(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addCompetitor")
+                    navController.navigate("addcompetitor")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1571,7 +1571,7 @@ fun addCompetitor(navController: NavHostController, viewModel: MainViewModel) {
                                     description = description,
                                 )
                                 viewModel.insertCompetitor(newCompetitor)
-                                navController.navigate("Competitor")
+                                navController.navigate("Competitors")
                             }
                         },
                         modifier = Modifier
@@ -1590,7 +1590,7 @@ fun addCompetitor(navController: NavHostController, viewModel: MainViewModel) {
 @Composable
 fun Incomes(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val Income by viewModel.getAllIncome().collectAsState(initial = emptyList())
+    val income by viewModel.getAllIncome().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -1618,7 +1618,7 @@ fun Incomes(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addIncome")
+                    navController.navigate("addincomes")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1629,19 +1629,19 @@ fun Incomes(navController: NavHostController, viewModel: MainViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (Income.isEmpty()) {
+            if (income.isEmpty()) {
             } else {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(Income) { Income ->
+                    items(income) { income ->
                         Income(
                             navController,
-                            Income = Income,
+                            income = income,
                             onClickDelete = {
-                                viewModel.deleteIncome(Income)
+                                viewModel.deleteIncome(income)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -1654,7 +1654,7 @@ fun Incomes(navController: NavHostController, viewModel: MainViewModel) {
 
 
 @Composable
-private fun Income(navController: NavHostController, Income: Income, onClickDelete: () -> Unit) {
+private fun Income(navController: NavHostController, income: Income, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -1670,7 +1670,7 @@ private fun Income(navController: NavHostController, Income: Income, onClickDele
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${Income.description}",
+                text = "${income.description}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
@@ -1750,7 +1750,7 @@ fun addIncome(navController: NavHostController, viewModel: MainViewModel) {
                                     description = description,
                                 )
                                 viewModel.insertIncome(newIncome)
-                                navController.navigate("Income")
+                                navController.navigate("Incomes")
                             }
                         },
                         modifier = Modifier
@@ -1796,7 +1796,7 @@ fun Stakeholders(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addStakeholder")
+                    navController.navigate("addstakeholders")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1928,7 +1928,7 @@ fun addStakeholder(navController: NavHostController, viewModel: MainViewModel) {
                                     description = description,
                                 )
                                 viewModel.insertStakeholders(newStakeholder)
-                                navController.navigate("Stakeholder")
+                                navController.navigate("Stakeholders")
                             }
                         },
                         modifier = Modifier

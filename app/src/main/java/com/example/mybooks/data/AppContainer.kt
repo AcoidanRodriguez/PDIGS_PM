@@ -13,6 +13,11 @@ interface AppContainer {
     val mrsRepository: MrRepository
     val frsRepository: FrRepository
     val irsRepository: IrRepository
+    val businessRepository: BusinessRepository
+    val marketRepository: MarketRepository
+    val competitorsRepository: CompetitorsRepository
+    val incomeRepository: IncomeRepository
+    val stakeholdersRepository: StakeholdersRepository
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
@@ -56,4 +61,24 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val irsRepository: IrRepository by lazy {
         OfflineIrsRepository(IrDatabase.getDatabase(context).irDao())
     }
+
+    override val businessRepository: BusinessRepository by lazy {
+        OfflineBusinessesRepository(BusinessDatabase.getDatabase(context).BusinessDao())
+    }
+
+    override val marketRepository: MarketRepository by lazy {
+        OfflineMarketsRepository(MarketDatabase.getDatabase(context).MarketDao())
+    }
+
+    override val competitorsRepository: CompetitorsRepository by lazy {
+        OfflineCompetitorsRepository(CompetitorsDatabase.getDatabase(context).CompetitorsDao())
+    }
+
+    override val incomeRepository: IncomeRepository by lazy {
+        OfflineIncomesRepository(IncomeDatabase.getDatabase(context).IncomeDao())
+    }
+    override val stakeholdersRepository: StakeholdersRepository by lazy {
+        OfflineStakeholdersRepository(StakeholdersDatabase.getDatabase(context).StakeholdersDao())
+    }
+
 }

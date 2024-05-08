@@ -18,7 +18,7 @@ import com.example.mybooks.composables.*
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels(){
-        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository, appContainer.strengthsRepository, appContainer.weaknessesRepository, appContainer.opportunitiesRepository, appContainer.threatsRepository, appContainer.hrsRepository, appContainer.mrsRepository, appContainer.frsRepository, appContainer.irsRepository)
+        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository, appContainer.strengthsRepository, appContainer.weaknessesRepository, appContainer.opportunitiesRepository, appContainer.threatsRepository, appContainer.hrsRepository, appContainer.mrsRepository, appContainer.frsRepository, appContainer.irsRepository, appContainer.businessRepository,appContainer.marketRepository,appContainer.incomeRepository,appContainer.competitorsRepository,appContainer.stakeholdersRepository)
     }
     private lateinit var appContainer: AppDataContainer
 
@@ -135,6 +135,36 @@ class MainActivity : ComponentActivity() {
                         composable("addIr") {
                             addIR(navController, viewModel)
 
+                        }
+                        composable("businesses") {
+                            Businesses(navController,viewModel)
+                        }
+                        composable("addbusinesses") {
+                            addBusiness(navController,viewModel)
+                        }
+                        composable("Markets") {
+                            Markets(navController,viewModel)
+                        }
+                        composable("addmarket") {
+                            addMarket(navController,viewModel)
+                        }
+                        composable("Competitors") {
+                            Competitors(navController,viewModel)
+                        }
+                        composable("addcompetitor") {
+                            addCompetitor(navController,viewModel)
+                        }
+                        composable("Incomes") {
+                            Incomes(navController,viewModel)
+                        }
+                        composable("addincomes") {
+                            addIncome(navController,viewModel)
+                        }
+                        composable("Stakeholders") {
+                            Stakeholders(navController,viewModel)
+                        }
+                        composable("addstakeholders") {
+                            addStakeholder(navController,viewModel)
                         }
                     }
                 }

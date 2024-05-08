@@ -33,7 +33,6 @@ import androidx.navigation.NavHostController
 import com.example.mybooks.R
 
 @Composable
-
 fun ProjectMain(navController: NavHostController, projectId: Int) {
 
     val orange = Color(0xFFE77A1C)
@@ -42,7 +41,6 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
     var expandedR by remember { mutableStateOf(false) }
     var expandedPB by remember { mutableStateOf(false) }
     var expandedSB by remember { mutableStateOf(false) }
-
     var id by remember { mutableStateOf(-1)    }
     id = projectId
 
@@ -92,7 +90,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
                     if (expandedES) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("businesses")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -105,7 +103,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Markets")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -118,7 +116,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Competitors")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -131,7 +129,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Incomes")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -144,7 +142,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("Stakeholders")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -379,7 +377,6 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                             Text("Sprint US", color = Color.White)
                         }
-
                     }
                 }
             }

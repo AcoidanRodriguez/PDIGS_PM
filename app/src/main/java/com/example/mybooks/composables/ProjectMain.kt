@@ -33,13 +33,16 @@ import androidx.navigation.NavHostController
 import com.example.mybooks.R
 
 @Composable
+
 fun ProjectMain(navController: NavHostController, projectId: Int) {
+
     val orange = Color(0xFFE77A1C)
     var expandedES by remember { mutableStateOf(false) }
     var expandedSWOT by remember { mutableStateOf(false) }
     var expandedR by remember { mutableStateOf(false) }
     var expandedPB by remember { mutableStateOf(false) }
     var expandedSB by remember { mutableStateOf(false) }
+
     var id by remember { mutableStateOf(-1)    }
     id = projectId
 
@@ -178,7 +181,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
                     if (expandedSWOT) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("strengths")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -191,7 +194,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("weaknesses")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -204,7 +207,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("opportunities")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -217,7 +220,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("threats")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -254,7 +257,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
                     if (expandedR) {
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("hrs")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -267,7 +270,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("mrs")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -280,7 +283,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("frs")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -293,7 +296,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
 
                         Button(
                             onClick = {
-                                navController.navigate("projectMain")
+                                navController.navigate("irs")
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -373,6 +376,7 @@ fun ProjectMain(navController: NavHostController, projectId: Int) {
                                 .fillMaxWidth()
                                 .height(56.dp)
                         ) {
+
                             Text("Sprint US", color = Color.White)
                         }
 

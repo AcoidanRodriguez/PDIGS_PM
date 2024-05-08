@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mybooks.MainViewModel
 import com.example.mybooks.R
-import com.example.mybooks.data.Project
+import com.example.mybooks.data.Threat
 
 
 @Composable
-fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
+fun Threats(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val projects by viewModel.getAllProjects().collectAsState(initial = emptyList())
+    val threats by viewModel.getAllThreats().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -57,7 +57,7 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.logo_pm),
+                painter = painterResource(R.drawable.threat),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
@@ -69,44 +69,30 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addProject")
+                    navController.navigate("addThreat")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
             ) {
-                Text("Create New Project")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("home")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Logout")
+                Text("Add Threat")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (projects.isEmpty()) {
+            if (threats.isEmpty()) {
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(projects) { project ->
-                        Project(
+                    items(threats) { threat ->
+                        Threat(
                             navController,
-                            project = project,
+                            threat = threat,
                             onClickDelete = {
-                                viewModel.deleteProject(project)
+                                viewModel.deleteThreat(threat)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -117,8 +103,9 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
+
 @Composable
-private fun Project(navController: NavHostController, project: Project, onClickDelete: () -> Unit) {
+private fun Threat(navController: NavHostController, threat: Threat, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -134,38 +121,20 @@ private fun Project(navController: NavHostController, project: Project, onClickD
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${project.title}",
+                text = "${threat.description}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
             if (expanded) {
-                Text(text = "${project.start_date} - ${project.end_date}")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = {
-                        navController.navigate("projectMain/${project.id}")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Access", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = onClickDelete,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    Text("Delete Project", color = Color.White)
+                    Text("Delete Threat", color = Color.White)
                 }
             }
         }
     }
 }
-

@@ -18,7 +18,7 @@ import com.example.mybooks.composables.*
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels(){
-        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository)
+        MainViewModelFactory(appContainer.usersRepository, appContainer.projectsRepository, appContainer.strengthsRepository, appContainer.weaknessesRepository, appContainer.opportunitiesRepository, appContainer.threatsRepository, appContainer.hrsRepository, appContainer.mrsRepository, appContainer.frsRepository, appContainer.irsRepository)
     }
     private lateinit var appContainer: AppDataContainer
 
@@ -74,15 +74,67 @@ class MainActivity : ComponentActivity() {
                                 UserStories(navController,appContainer.projectsRepository,projectId,viewModel)
                             }
                         }
-                        composable("userStoriesSprint/{projectId}"){
-                            navBackStackEntry ->
+                        composable("userStoriesSprint/{projectId}") { navBackStackEntry ->
                             val pr4 = navBackStackEntry.arguments.toString()
                             val projectIdRegex = Regex("projectId=(\\d+)")
                             val matchResult = projectIdRegex.find(pr4)
                             val projectId = matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
-                            if(projectId != null){
-                                UserStoriesSprint(projectId,appContainer.projectsRepository,viewModel)
+                            if (projectId != null) {
+                                UserStoriesSprint(
+                                    projectId,
+                                    appContainer.projectsRepository,
+                                    viewModel
+                                )
                             }
+                        }
+                        composable("strengths") {
+                            Strengths(navController, viewModel)
+                        }
+                        composable("addStrength") {
+                            addStrength(navController, viewModel)
+                        }
+                        composable("weaknesses") {
+                            Weaknesses(navController, viewModel)
+                        }
+                        composable("addWeakness") {
+                            addWeakness(navController, viewModel)
+                        }
+                        composable("opportunities") {
+                            Opportunities(navController, viewModel)
+                        }
+                        composable("addOpportunity") {
+                            addOpportunity(navController, viewModel)
+                        }
+                        composable("threats") {
+                            Threats(navController, viewModel)
+                        }
+                        composable("addThreat") {
+                            addThreat(navController, viewModel)
+                        }
+                        composable("hrs") {
+                            HRs(navController, viewModel)
+                        }
+                        composable("addHr") {
+                            addHR(navController, viewModel)
+                        }
+                        composable("mrs") {
+                            MRs(navController, viewModel)
+                        }
+                        composable("addMr") {
+                            addMR(navController, viewModel)
+                        }
+                        composable("frs") {
+                            FRs(navController, viewModel)
+                        }
+                        composable("addFr") {
+                            addFR(navController, viewModel)
+                        }
+                        composable("irs") {
+                            IRs(navController, viewModel)
+                        }
+                        composable("addIr") {
+                            addIR(navController, viewModel)
+
                         }
                     }
                 }

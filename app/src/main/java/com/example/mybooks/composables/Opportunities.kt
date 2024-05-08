@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mybooks.MainViewModel
 import com.example.mybooks.R
-import com.example.mybooks.data.Project
+import com.example.mybooks.data.Opportunity
 
 
 @Composable
-fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
+fun Opportunities(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val projects by viewModel.getAllProjects().collectAsState(initial = emptyList())
+    val opportunities by viewModel.getAllOpportunities().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -57,7 +57,7 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.logo_pm),
+                painter = painterResource(R.drawable.opportunity),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
@@ -69,44 +69,30 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addProject")
+                    navController.navigate("addOpportunity")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
             ) {
-                Text("Create New Project")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("home")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Logout")
+                Text("Add Opportunity")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (projects.isEmpty()) {
+            if (opportunities.isEmpty()) {
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(projects) { project ->
-                        Project(
+                    items(opportunities) { opportunity ->
+                        Opportunity(
                             navController,
-                            project = project,
+                            opportunity = opportunity,
                             onClickDelete = {
-                                viewModel.deleteProject(project)
+                                viewModel.deleteOpportunity(opportunity)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -117,8 +103,9 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
+
 @Composable
-private fun Project(navController: NavHostController, project: Project, onClickDelete: () -> Unit) {
+private fun Opportunity(navController: NavHostController, opportunity: Opportunity, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -134,38 +121,20 @@ private fun Project(navController: NavHostController, project: Project, onClickD
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${project.title}",
+                text = "${opportunity.description}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
             if (expanded) {
-                Text(text = "${project.start_date} - ${project.end_date}")
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = {
-                        navController.navigate("projectMain/${project.id}")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Access", color = Color.White)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = onClickDelete,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    Text("Delete Project", color = Color.White)
+                    Text("Delete Opportunity", color = Color.White)
                 }
             }
         }
     }
 }
-

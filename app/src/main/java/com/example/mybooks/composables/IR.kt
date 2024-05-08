@@ -35,13 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mybooks.MainViewModel
 import com.example.mybooks.R
-import com.example.mybooks.data.Project
-
+import com.example.mybooks.data.Ir
 
 @Composable
-fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
+fun IRs(navController: NavHostController, viewModel: MainViewModel) {
     val orange = Color(0xFFE77A1C)
-    val projects by viewModel.getAllProjects().collectAsState(initial = emptyList())
+    val irs by viewModel.getAllIrs().collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -57,7 +56,7 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.logo_pm),
+                painter = painterResource(R.drawable.ir),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alpha = 0.8F,
@@ -69,44 +68,30 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    navController.navigate("addProject")
+                    navController.navigate("addIR")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
             ) {
-                Text("Create New Project")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate("home")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Logout")
+                Text("Add Informational Resource")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (projects.isEmpty()) {
+            if (irs.isEmpty()) {
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    items(projects) { project ->
-                        Project(
+                    items(irs) { ir ->
+                        IR(
                             navController,
-                            project = project,
+                            ir = ir,
                             onClickDelete = {
-                                viewModel.deleteProject(project)
+                                viewModel.deleteIr(ir)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -117,8 +102,9 @@ fun MyProjects(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
+
 @Composable
-private fun Project(navController: NavHostController, project: Project, onClickDelete: () -> Unit) {
+private fun IR(navController: NavHostController, ir: Ir, onClickDelete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -134,38 +120,27 @@ private fun Project(navController: NavHostController, project: Project, onClickD
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${project.title}",
+                text = "${ir.name}",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
             )
 
             if (expanded) {
-                Text(text = "${project.start_date} - ${project.end_date}")
-
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Button(
-                    onClick = {
-                        navController.navigate("projectMain/${project.id}")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Access", color = Color.White)
-                }
+                Text(text = "Type of Resource: ${ir.type}")
+                Text(text = "Current Balance: ${ir.description}")
+                Text(text = "Creation/Modification Date: ${ir.date}")
 
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = onClickDelete,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                 ) {
-                    Text("Delete Project", color = Color.White)
+                    Text("Delete Informational Resource", color = Color.White)
                 }
             }
         }
     }
 }
-
